@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "203415556792",
+    "firebase_url": "https://jellevannoordpset6.firebaseio.com",
+    "project_id": "jellevannoordpset6",
+    "storage_bucket": "jellevannoordpset6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203415556792:android:60a1c6234ac72d14",
+        "android_client_info": {
+          "package_name": "com.example.jelle.jellevannoord_pset6"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203415556792-27u19grdn0gjq3v4g9n55tsgf3927afm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jelle.jellevannoord_pset6",
+            "certificate_hash": "a3ef6a60c29de632811b732bdf8bd879cd72bb00"
+          }
+        },
+        {
+          "client_id": "203415556792-q0tqn72trevnvbs3vmg0nleiqi1be095.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_gIJhHFoHpXfrR4TI3TqwLlhaZ2Jwxu8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203415556792-q0tqn72trevnvbs3vmg0nleiqi1be095.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
