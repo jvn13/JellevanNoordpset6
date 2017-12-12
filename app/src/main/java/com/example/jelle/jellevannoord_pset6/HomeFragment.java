@@ -2,6 +2,7 @@ package com.example.jelle.jellevannoord_pset6;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +34,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.registerButton:
                 RegisterFragment registerFragment = new RegisterFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment, registerFragment).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.animator.slide_in_left,R.animator.slide_out_right,0,0)
+                        .replace(R.id.fragment, registerFragment).addToBackStack(null).commit();
                 break;
             case R.id.loginLink:
                 LoginFragment loginFragment = new LoginFragment();
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment, loginFragment).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.animator.slide_in_left,R.animator.slide_out_right,R.animator.slide_out_left,R.animator.slide_in_right)
+                        .replace(R.id.fragment, loginFragment).addToBackStack(null).commit();
                 break;
         }
     }
+
+
 }
