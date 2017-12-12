@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/navigation_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home_grey_24dp" />
+    <item android:id="@+id/navigation_highscore"
+        android:title="Highscorelist"
+        android:icon="@drawable/ic_whatshot_grey_24dp" />
+    <item android:id="@+id/navigation_account"
+        android:title="Account"
+        android:icon="@drawable/ic_person_grey_24dp" />
+</menu>
