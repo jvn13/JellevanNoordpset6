@@ -1,4 +1,4 @@
-[![BCH compliance](https://bettercodehub.com/edge/badge/jvn13/JellevanNoordpset5?branch=master)](https://bettercodehub.com/)
+[![BCH compliance](https://bettercodehub.com/edge/badge/jvn13/JellevanNoordpset6?branch=master)](https://bettercodehub.com/)
 # Quiz app
 
 ## About

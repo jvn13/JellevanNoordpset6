@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         updateUI(mAuth.getCurrentUser());
     }
 
@@ -128,13 +127,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(FirebaseUser currentUser) {
-        if(currentUser != null) {
-            navigation.setVisibility(View.VISIBLE);
-            bottomNavigationFragmentManager(navigation.getSelectedItemId());
-        } else {
+        if(currentUser == null) {
             navigation.setVisibility(View.GONE);
             HomeFragment fragment = new HomeFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "home").commit();
+        } else {
+            navigation.setVisibility(View.VISIBLE);
         }
     }
 
