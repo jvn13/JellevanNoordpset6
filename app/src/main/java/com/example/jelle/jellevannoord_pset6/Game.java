@@ -4,57 +4,57 @@ import java.util.ArrayList;
 
 public class Game {
 
-    ArrayList<Question> questions;
-    int current;
-    int karma;
-    int correct;
-    boolean lastAnswer;
+    private ArrayList<Question> mQuestions;
+    private int mCurrent;
+    private int mKarma;
+    private int mCorrect;
+    private boolean mLastAnswer;
 
-    public Game(ArrayList<Question> questions, int current, int karma, int correct, boolean lastAnswer) {
-        this.questions = questions;
-        this.current = current;
-        this.karma = karma;
-        this.correct = correct;
-        this.lastAnswer = lastAnswer;
+    public Game(ArrayList<Question> mQuestions, int current, int mKarma, int mCorrect, boolean mLastAnswer) {
+        this.mQuestions = mQuestions;
+        this.mCurrent = current;
+        this.mKarma = mKarma;
+        this.mCorrect = mCorrect;
+        this.mLastAnswer = mLastAnswer;
     }
 
     public Question getQuestion() {
-        return questions.get(current);
-    }
-
-    public int getCurrent() {
-        return current;
-    }
-
-    public void addCurrent() {
-        current++;
-    }
-
-    public int getKarma() {
-        return karma;
-    }
-
-    public void addKarma(int karma) {
-        this.karma = this.karma + karma;
-    }
-
-    public int getCorrect() {
-        return correct;
-    }
-
-    public void addCorrect() {
-        correct++;
-    }
-
-    public boolean isLastAnswer() {
-        return lastAnswer;
-    }
-
-    public void setLastAnswer(boolean lastAnswer) {
-        this.lastAnswer = lastAnswer;
+        return mQuestions.get(mCurrent);
     }
 
     public int getTotalQuestions() {
-        return questions.size();
+        return mQuestions.size();
+    }
+
+    public int getCurrent() {
+        return mCurrent;
+    }
+
+    public void addCurrent() {
+        mCurrent++;
+    }
+
+    public int getKarma() {
+        return mKarma;
+    }
+
+    public void addKarma(int mKarma) {
+        this.mKarma = this.mKarma + mKarma;
+    }
+
+    public int getCorrect() {
+        return mCorrect;
+    }
+
+    public void addCorrect() {
+        mCorrect++;
+    }
+
+    public boolean isLastAnswer() {
+        return mLastAnswer;
+    }
+
+    public void setLastAnswer(boolean mLastAnswer) {
+        this.mLastAnswer = mLastAnswer;
     }
 }

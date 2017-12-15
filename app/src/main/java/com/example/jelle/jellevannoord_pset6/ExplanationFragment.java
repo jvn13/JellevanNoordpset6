@@ -9,15 +9,15 @@ import android.widget.Button;
 
 public class ExplanationFragment extends Fragment implements View.OnClickListener {
 
-    Button start;
+    private Button mStart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explanation, container, false);
-        start = view.findViewById(R.id.start);
-        start.setOnClickListener(this);
+        mStart = view.findViewById(R.id.start);
+        mStart.setOnClickListener(this);
         return view;
     }
 
@@ -26,8 +26,6 @@ public class ExplanationFragment extends Fragment implements View.OnClickListene
         switch (view.getId()) {
             case R.id.start:
                 ((GameActivity)getActivity()).getQuestions();
-                //ExplanationFragment fragment = new ExplanationFragment();
-                //getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "explanation").commit();
                 break;
         }
     }

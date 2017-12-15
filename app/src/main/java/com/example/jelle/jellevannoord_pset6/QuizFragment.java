@@ -40,8 +40,7 @@ import java.util.Date;
 
 public class QuizFragment extends Fragment {
 
-    private DatabaseReference mDatabase;
-    TextView info;
+    private TextView mInfo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,9 +49,10 @@ public class QuizFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
         // Set a custom title in the action bar
         ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.app_name));
+        // Make bottom navigation visible
         ((MainActivity)getActivity()).navigation.setVisibility(View.VISIBLE);
-        mDatabase = ((MainActivity)getActivity()).mDatabase;
-        info = view.findViewById(R.id.info);
+        // assign TextView
+        mInfo = view.findViewById(R.id.info);
         return view;
     }
 
@@ -66,7 +66,7 @@ public class QuizFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        info.setText(R.string.info);
+        mInfo.setText(R.string.info);
     }
 
     @Override
@@ -78,11 +78,6 @@ public class QuizFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_game:
-                /*
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                NewGameFragment fragment = new NewGameFragment();
-                fragment.show(ft, "new game");
-                */
                 Intent intent = new Intent(getContext(), GameActivity.class);
                 startActivity(intent);
         }

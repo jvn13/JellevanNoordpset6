@@ -26,8 +26,8 @@ import java.util.List;
 
 public class HighscoreFragment extends ListFragment {
 
-    private ArrayAdapter adapter;
-    ArrayList<User> users;
+    private ArrayAdapter mAdapter;
+    private ArrayList<User> mUsers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,14 +46,14 @@ public class HighscoreFragment extends ListFragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        MainActivity.progressLayout.setVisibility(View.VISIBLE);
+        MainActivity.sProgressLayout.setVisibility(View.VISIBLE);
         getUsers();
-        MainActivity.progressLayout.setVisibility(View.INVISIBLE);
+        MainActivity.sProgressLayout.setVisibility(View.INVISIBLE);
     }
 
-    public ArrayList<User> sortUsers(ArrayList<User> users){
-        Collections.sort(users);
-        return users;
+    public ArrayList<User> sortUsers(ArrayList<User> mUsers){
+        Collections.sort(mUsers);
+        return mUsers;
     }
 
     @Override
@@ -74,17 +74,17 @@ public class HighscoreFragment extends ListFragment {
                 Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        MainActivity.mDatabase.child("users").addListenerForSingleValueEvent(usersListener);
+        MainActivity.sDatabase.child("users").addListenerForSingleValueEvent(usersListener);
     }
 
     public void setUsers(DataSnapshot dataSnapshot) {
-        users = new ArrayList<>();
+        mUsers = new ArrayList<>();
         for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-            User user = snapshot.getValue(User.class);
-            users.add(user);
+            User mUser = snapshot.getValue(User.class);
+            mUsers.add(mUser);
         }
-        ArrayList<User> sortedUsers = sortUsers(users);
-        adapter = new UserAdapter(getContext(), R.layout.row_user, sortedUsers);
-        this.setListAdapter(adapter);
+        ArrayList<User> mSortedUsers = sortUsers(mUsers);
+        mAdapter = new UserAdapter(getContext(), R.layout.row_user, mSortedUsers);
+        this.setListAdapter(mAdapter);
     }
 }

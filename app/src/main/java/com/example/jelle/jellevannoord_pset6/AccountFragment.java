@@ -16,21 +16,23 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+/*
+
+ */
+
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
-    Button confirm, logout;
-    TextView usernameTextView;
+    private Button mConfirm, mLogout;
+    private TextView mUsernameTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
-        confirm = view.findViewById(R.id.confirm);
-        confirm.setOnClickListener(this);
-        logout = view.findViewById(R.id.logout);
-        logout.setOnClickListener(this);
-        usernameTextView = view.findViewById(R.id.usernameTextView);
+        assignViews(view);
+        mConfirm.setOnClickListener(this);
+        mLogout.setOnClickListener(this);
         return view;
     }
 
@@ -46,18 +48,24 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         getUsername();
     }
 
+    private void assignViews(View view) {
+        mConfirm = view.findViewById(R.id.change);
+        mLogout = view.findViewById(R.id.logout);
+        mUsernameTextView = view.findViewById(R.id.usernameTextView);
+    }
+
     public void getUsername() {
         ValueEventListener settingsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                String username;
+                // Get Post object
+                String mUsername;
                 if(dataSnapshot.getValue() == null) {
-                    username = "";
+                    mUsername = "";
                 } else {
-                    username = dataSnapshot.getValue().toString();
+                    mUsername = dataSnapshot.getValue().toString();
                 }
-                usernameTextView.setText(username);
+                mUsernameTextView.setText(mUsername);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -65,13 +73,15 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        MainActivity.mDatabase.child("users").child(MainActivity.mAuth.getCurrentUser().getUid()).child("username").addListenerForSingleValueEvent(settingsListener);
+        FirebaseUser mUser = MainActivity.sAuth.getCurrentUser();
+        MainActivity.sDatabase.child("users").child(mUser.getUid()).child("username")
+                .addListenerForSingleValueEvent(settingsListener);
     }
 
     public void setUsername() {
-        CharSequence username = usernameTextView.getText();
-        if(username != null && username != "") {
-            MainActivity.mDatabase.child("users").child(MainActivity.mAuth.getCurrentUser().getUid()).child("username").setValue(username.toString());
+        CharSequence mUsername = mUsernameTextView.getText();
+        if(mUsername != null && mUsername != "") {
+            MainActivity.sDatabase.child("users").child(MainActivity.sAuth.getCurrentUser().getUid()).child("username").setValue(mUsername.toString());
             Toast.makeText(getContext(),"Username updated",Toast.LENGTH_LONG);
         } else {
             Toast.makeText(getContext(),"Invalid username",Toast.LENGTH_LONG);
@@ -81,12 +91,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch(view.getId()) {
-            case R.id.confirm:
+            // Change the username
+            case R.id.change:
                 setUsername();
                 break;
+            // Logout the current user and update the layout
             case R.id.logout:
-                MainActivity.mAuth.signOut();
-                ((MainActivity)getActivity()).updateUI(MainActivity.mAuth.getCurrentUser());
+                MainActivity.sAuth.signOut();
+                ((MainActivity)getActivity()).updateUI(MainActivity.sAuth.getCurrentUser());
                 break;
         }
     }

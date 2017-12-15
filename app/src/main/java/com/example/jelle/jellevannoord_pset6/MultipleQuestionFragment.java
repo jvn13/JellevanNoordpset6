@@ -16,21 +16,23 @@ import java.util.Random;
 
 public class MultipleQuestionFragment extends Fragment implements View.OnClickListener {
 
-    boolean multiple = false;
-    TextView difficultyTV, questionCounter, questionTV;
-    Button button0, button1, button2, button3;
-    Question question;
+    private boolean mMultiple = false;
+    private Button mButton0, mButton1, mButton2, mButton3;
+    private Question mQuestion;
+    private TextView mDifficultyTextView, mQuestionCounter, mQuestionTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_multiple_question, container, false);
+        // Assign the views
         assignViews(view);
-        button0.setOnClickListener(this);
-        button1.setOnClickListener(this);
-        button2.setOnClickListener(this);
-        button3.setOnClickListener(this);
+        // Set Button Listeners
+        mButton0.setOnClickListener(this);
+        mButton1.setOnClickListener(this);
+        mButton2.setOnClickListener(this);
+        mButton3.setOnClickListener(this);
         return view;
     }
 
@@ -43,31 +45,31 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        question = GameActivity.game.getQuestion();
-        if(question.getType().equals("multiple")) {
-            multiple = true;
+        mQuestion = GameActivity.sGame.getQuestion();
+        if(mQuestion.getType().equals("multiple")) {
+            mMultiple = true;
         } else {
-            button2.setVisibility(View.GONE);
-            button3.setVisibility(View.GONE);
+            mButton2.setVisibility(View.GONE);
+            mButton3.setVisibility(View.GONE);
         }
-        difficultyTV.setText(question.getDifficulty());
-        questionCounter.setText(String.valueOf(GameActivity.game.getCurrent()+1)
-                + " / " + String.valueOf(GameActivity.game.getTotalQuestions()));
-        questionTV.setText(Html.fromHtml(question.getQuestion()));
-        ArrayList<Button> buttons = createButtonsList(multiple);
-        ArrayList<String> answers = question.getAnswers();
-        if(multiple) {
-            Random random = new Random();
-            if(!answers.isEmpty()) {
-                for(int i=0;i<buttons.size();i++) {
-                    int index = random.nextInt(answers.size());
-                    buttons.get(i).setText(Html.fromHtml(answers.get(index)));
-                    answers.remove(index);
+        mDifficultyTextView.setText(mQuestion.getDifficulty());
+        mQuestionCounter.setText(String.valueOf(GameActivity.sGame.getCurrent()+1)
+                + " / " + String.valueOf(GameActivity.sGame.getTotalQuestions()));
+        mQuestionTextView.setText(Html.fromHtml(mQuestion.getQuestion()));
+        ArrayList<Button> mButtons = createButtonsList(mMultiple);
+        ArrayList<String> mAnswers = mQuestion.getAnswers();
+        if(mMultiple) {
+            Random mRandom = new Random();
+            if(!mAnswers.isEmpty()) {
+                for(int i=0;i<mButtons.size();i++) {
+                    int index = mRandom.nextInt(mAnswers.size());
+                    mButtons.get(i).setText(Html.fromHtml(mAnswers.get(index)));
+                    mAnswers.remove(index);
                 }
             }
         } else {
-            button0.setText("True");
-            button1.setText("False");
+            mButton0.setText("True");
+            mButton1.setText("False");
         }
     }
 
@@ -75,63 +77,65 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState != null) {
-            button0.setText(savedInstanceState.getString(String.valueOf(R.id.button0)));
-            button1.setText(savedInstanceState.getString(String.valueOf(R.id.button1)));
-            button2.setText(savedInstanceState.getString(String.valueOf(R.id.button2)));
-            button3.setText(savedInstanceState.getString(String.valueOf(R.id.button3)));
+            mButton0.setText(savedInstanceState.getString(String.valueOf(R.id.button0)));
+            mButton1.setText(savedInstanceState.getString(String.valueOf(R.id.button1)));
+            mButton2.setText(savedInstanceState.getString(String.valueOf(R.id.button2)));
+            mButton3.setText(savedInstanceState.getString(String.valueOf(R.id.button3)));
         }
     }
 
     @Override
     public void onClick(View view) {
-        Button button = (Button) view;
-        String userAnswer = button.getText().toString();
-        if(userAnswer.equals(question.getCorrect_answer())) {
-            int karma = 2 * difficultyToInt(question.getDifficulty());
-            if(!multiple) {
-                karma = karma / 2;
+        Button mButton = (Button) view;
+        String mUserAnswer = mButton.getText().toString();
+        if(mUserAnswer.equals(mQuestion.getCorrect_answer())) {
+            int mKarma = 2 * difficultyToInt(mQuestion.getDifficulty());
+            if(!mMultiple) {
+                mKarma = mKarma / 2;
             }
-            GameActivity.game.addKarma(karma);
-            GameActivity.game.addCorrect();
-            GameActivity.game.setLastAnswer(true);
+            GameActivity.sGame.addKarma(mKarma);
+            GameActivity.sGame.addCorrect();
+            GameActivity.sGame.setLastAnswer(true);
         } else {
-            GameActivity.game.setLastAnswer(false);
+            GameActivity.sGame.setLastAnswer(false);
         }
         ((GameActivity)getActivity()).openBetweenFragment();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putString(String.valueOf(R.id.button0), button0.getText().toString());
-        savedInstanceState.putString(String.valueOf(R.id.button1), button1.getText().toString());
-        savedInstanceState.putString(String.valueOf(R.id.button2), button2.getText().toString());
-        savedInstanceState.putString(String.valueOf(R.id.button3), button3.getText().toString());
+        savedInstanceState.putString(String.valueOf(R.id.button0), mButton0.getText().toString());
+        savedInstanceState.putString(String.valueOf(R.id.button1), mButton1.getText().toString());
+        savedInstanceState.putString(String.valueOf(R.id.button2), mButton2.getText().toString());
+        savedInstanceState.putString(String.valueOf(R.id.button3), mButton3.getText().toString());
         super.onSaveInstanceState(savedInstanceState);
     }
 
     private void assignViews(View view) {
-        difficultyTV = view.findViewById(R.id.difficultyTV);
-        questionCounter = view.findViewById(R.id.questionCounter);
-        questionTV = view.findViewById(R.id.questionTV);
-        button0 = view.findViewById(R.id.button0);
-        button1 = view.findViewById(R.id.button1);
-        button2 = view.findViewById(R.id.button2);
-        button3 = view.findViewById(R.id.button3);
+        // TextViews
+        mDifficultyTextView = view.findViewById(R.id.difficultyTV);
+        mQuestionCounter = view.findViewById(R.id.questionCounter);
+        mQuestionTextView = view.findViewById(R.id.questionTV);
+        // Buttons
+        mButton0 = view.findViewById(R.id.button0);
+        mButton1 = view.findViewById(R.id.button1);
+        mButton2 = view.findViewById(R.id.button2);
+        mButton3 = view.findViewById(R.id.button3);
     }
 
-    private ArrayList<Button> createButtonsList(boolean multiple) {
-        ArrayList<Button> buttons = new ArrayList<>();
-        buttons.add(button0);
-        buttons.add(button1);
-        if(multiple) {
-            buttons.add(button2);
-            buttons.add(button3);
+    private ArrayList<Button> createButtonsList(boolean mMultiple) {
+        ArrayList<Button> mButtons = new ArrayList<>();
+        mButtons.add(mButton0);
+        mButtons.add(mButton1);
+        if(mMultiple) {
+            mButtons.add(mButton2);
+            mButtons.add(mButton3);
         }
-        return buttons;
+        return mButtons;
     }
 
-    private int difficultyToInt(String difficulty) {
-        switch(difficulty) {
+    private int difficultyToInt(String mDifficulty) {
+        switch(mDifficulty) {
             case "easy":
                 return 1;
             case "medium":

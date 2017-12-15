@@ -15,48 +15,48 @@ import java.util.Random;
 
 public class ResultFragment extends Fragment implements View.OnClickListener {
 
-    TextView result, correct;
-    Button next;
+    private TextView mResult, mCorrect;
+    private Button mNext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_result, container, false);
-        result = view.findViewById(R.id.result);
-        correct = view.findViewById(R.id.correct);
-        next = view.findViewById(R.id.next);
-        next.setOnClickListener(this);
+        mResult = view.findViewById(R.id.result);
+        mCorrect = view.findViewById(R.id.correct);
+        mNext = view.findViewById(R.id.next);
+        mNext.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if(GameActivity.game.getCurrent()+1 < GameActivity.game.getTotalQuestions()) {
-            if(GameActivity.game.isLastAnswer()) {
-                result.setText(R.string.correct_answer);
+        if(GameActivity.sGame.getCurrent()+1 < GameActivity.sGame.getTotalQuestions()) {
+            if(GameActivity.sGame.isLastAnswer()) {
+                mResult.setText(R.string.correct_answer);
             } else {
-                result.setText(R.string.incorrect_answer);
-                correct.setText("The correct answer was " + GameActivity.game.getQuestion().getCorrect_answer());
+                mResult.setText(R.string.incorrect_answer);
+                mCorrect.setText("The correct answer was " + GameActivity.sGame.getQuestion().getCorrect_answer());
             }
         } else {
-            result.setText("You've answered all the questions");
-            correct.setText(String.valueOf(GameActivity.game.getCorrect() ) + " of the " +
-                    String.valueOf(GameActivity.game.getTotalQuestions()) +
-                    " questions were correct. You've earned " + String.valueOf(GameActivity.game.getKarma()) + " karma!");
-            next.setText(R.string.back_home);
+            mResult.setText("You've answered all the questions");
+            mCorrect.setText(String.valueOf(GameActivity.sGame.getCorrect() ) + " of the " +
+                    String.valueOf(GameActivity.sGame.getTotalQuestions()) +
+                    " questions were correct. You've earned " + String.valueOf(GameActivity.sGame.getKarma()) + " karma!");
+            mNext.setText(R.string.back_home);
         }
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.next) {
-            if(GameActivity.game.getCurrent()+1 < GameActivity.game.getTotalQuestions()) {
-                GameActivity.game.addCurrent();
+            if(GameActivity.sGame.getCurrent()+1 < GameActivity.sGame.getTotalQuestions()) {
+                GameActivity.sGame.addCurrent();
                 ((GameActivity)getActivity()).nextQuestion();
             } else {
-                MainActivity.addKarma(GameActivity.game.getKarma());
+                MainActivity.addKarma(GameActivity.sGame.getKarma());
                 getActivity().finish();
             }
         }

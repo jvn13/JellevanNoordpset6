@@ -2,14 +2,14 @@ package com.example.jelle.jellevannoord_pset6;
 
 public class User implements Comparable<User> {
 
-    Long karma;
-    String username;
+    public Long karma;
+    public String username;
 
     public User() {
     }
 
-    public User(Long karma, String username) {
-        this.karma = karma;
+    public User(Long mKarma, String username) {
+        this.karma = mKarma;
         this.username = username;
     }
 

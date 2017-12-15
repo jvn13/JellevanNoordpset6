@@ -13,31 +13,33 @@ import org.w3c.dom.Text;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    Button register;
-    TextView login;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        // Set custom title
         ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.app_name));
-        register = view.findViewById(R.id.registerButton);
-        register.setOnClickListener(this);
-        login = view.findViewById(R.id.loginLink);
-        login.setOnClickListener(this);
+        // Assign the Button views
+        Button mRegister = view.findViewById(R.id.registerButton);
+        TextView mLogin = view.findViewById(R.id.loginLink);
+        // Set the onclick listeners of the buttons
+        mRegister.setOnClickListener(this);
+        mLogin.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            // Go to the Register Fragment with a custom transition
             case R.id.registerButton:
                 RegisterFragment registerFragment = new RegisterFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .setCustomAnimations(R.animator.slide_in_left,R.animator.slide_out_right,R.animator.slide_out_left,R.animator.slide_in_right)
                         .replace(R.id.fragment, registerFragment).addToBackStack(null).commit();
                 break;
+            // Go to the Login Fragment with a custom transition
             case R.id.loginLink:
                 LoginFragment loginFragment = new LoginFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
@@ -46,6 +48,4 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
-
 }

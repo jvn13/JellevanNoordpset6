@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
 
-    static public Game game;
+    public static Game sGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,8 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         if(null == savedInstanceState) {
             ExplanationFragment fragment = new ExplanationFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "explanation").commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment, fragment, "explanation").commit();
         }
     }
 
@@ -39,22 +40,22 @@ public class GameActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        JSONArray jArray = response.optJSONArray("results");
-                        if(jArray != null) {
-                            ArrayList<Question> questions = new ArrayList<>();
-                            for (int i=0;i<jArray.length();i++){
-                                JSONObject question = jArray.optJSONObject(i);
+                        JSONArray mJSONArray = response.optJSONArray("results");
+                        if(mJSONArray != null) {
+                            ArrayList<Question> mQuestions = new ArrayList<>();
+                            for (int i=0;i<mJSONArray.length();i++){
+                                JSONObject mQuestion = mJSONArray.optJSONObject(i);
                                 // Create an ArrayList with all the incorrect answers in it
-                                JSONArray incorrect_answers = question.optJSONArray("incorrect_answers");
+                                JSONArray incorrect_answers = mQuestion.optJSONArray("incorrect_answers");
                                 ArrayList<String> answers = new ArrayList<>();
                                 for (int j=0;j<incorrect_answers.length();j++){
                                     answers.add(incorrect_answers.optString(j));
                                 }
-                                questions.add(new Question(question.optString("category"), question.optString("type"),
-                                        question.optString("difficulty"), question.optString("question"),
-                                        question.optString("correct_answer"), answers));
+                                mQuestions.add(new Question(mQuestion.optString("category"), mQuestion.optString("type"),
+                                        mQuestion.optString("difficulty"), mQuestion.optString("question"),
+                                        mQuestion.optString("correct_answer"), answers));
                             }
-                            startGame(questions);
+                            startGame(mQuestions);
                         } else {
                             // TODO: set error when internet result is NULL
                         }
@@ -70,8 +71,9 @@ public class GameActivity extends AppCompatActivity {
         queue.add(jsObjRequest);
     }
 
-    public void startGame(ArrayList<Question> questions) {
-        game = new Game(questions, 0, 0, 0, false);
+    // Create new game and go to the first question
+    private void startGame(ArrayList<Question> questions) {
+        sGame = new Game(questions, 0, 0, 0, false);
         nextQuestion();
     }
 

@@ -4,44 +4,44 @@ import java.util.ArrayList;
 
 public class Question {
 
-    String category;
-    String type;
-    String difficulty;
-    String question;
-    String correct_answer;
-    ArrayList<String> answers;
+    private String mCategory;
+    private String mType;
+    private String mDifficulty;
+    private String mQuestion;
+    private String mCorrectAnswer;
+    private ArrayList<String> mAnswers;
 
-    public Question(String category, String type, String difficulty, String question, String correct_answer, ArrayList<String> answers) {
-        this.category = category;
-        this.type = type;
-        this.difficulty = difficulty;
-        this.question = question;
-        this.correct_answer = correct_answer;
-        this.answers = answers;
-        answers.add(this.correct_answer);
+    public Question(String mCategory, String mType, String mDifficulty, String mQuestion, String mCorrectAnswer, ArrayList<String> mAnswers) {
+        this.mCategory = mCategory;
+        this.mType = mType;
+        this.mDifficulty = mDifficulty;
+        this.mQuestion = mQuestion;
+        this.mCorrectAnswer = mCorrectAnswer;
+        this.mAnswers = mAnswers;
+        mAnswers.add(this.mCorrectAnswer);
     }
 
     public String getCategory() {
-        return category;
+        return mCategory;
     }
 
     public String getType() {
-        return type;
+        return mType;
     }
 
     public String getDifficulty() {
-        return difficulty;
+        return mDifficulty;
     }
 
     public String getQuestion() {
-        return question;
+        return mQuestion;
     }
 
     public String getCorrect_answer() {
-        return correct_answer;
+        return mCorrectAnswer;
     }
 
     public ArrayList<String> getAnswers() {
-        return answers;
+        return mAnswers;
     }
 }

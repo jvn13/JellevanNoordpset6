@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class UserAdapter extends ArrayAdapter<User> {
 
     private Context mContext;
-    int mResource;
+    private int mResource;
 
     public UserAdapter(@NonNull Context context, int resource, @NonNull ArrayList<User> objects) {
         super(context, resource, objects);
@@ -30,11 +30,11 @@ public class UserAdapter extends ArrayAdapter<User> {
 
         TextView positionTextView = convertView.findViewById(R.id.position);
         TextView usernameTextview = convertView.findViewById(R.id.usernameTextView);
-        TextView karmaTextview = convertView.findViewById(R.id.karma);
+        TextView karmaTextView = convertView.findViewById(R.id.karma);
 
         positionTextView.setText(String.valueOf(position+1));
         usernameTextview.setText(getItem(position).username);
-        karmaTextview.setText(String.valueOf(getItem(position).karma));
+        karmaTextView.setText(String.valueOf(getItem(position).karma));
         return convertView;
     }
 }

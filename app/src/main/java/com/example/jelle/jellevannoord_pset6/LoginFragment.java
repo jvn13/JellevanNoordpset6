@@ -16,9 +16,7 @@ import android.widget.Toast;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
 
-    EditText email;
-    EditText password;
-    Button login;
+    private EditText mEmail, mPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,10 +24,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.login));
-        email = view.findViewById(R.id.email);
-        password = view.findViewById(R.id.password);
-        login = view.findViewById(R.id.loginButton);
-        login.setOnClickListener(this);
+        mEmail = view.findViewById(R.id.email);
+        mPassword = view.findViewById(R.id.password);
+        Button mLogin = view.findViewById(R.id.loginButton);
+        mLogin.setOnClickListener(this);
         return view;
     }
 
@@ -37,17 +35,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.loginButton:
-                handleLogin();
+                checkFields();
                 break;
         }
     }
 
-    public void handleLogin() {
+    private void checkFields() {
         // check email not empty
-        if(isNotEmpty(email)) {
+        if(isNotEmpty(mEmail)) {
             // check password not empty
-            if(isNotEmpty(password)) {
-                ((MainActivity)getActivity()).signIn(email.getText().toString(),password.getText().toString());
+            if(isNotEmpty(mPassword)) {
+                ((MainActivity)getActivity()).signIn(mEmail.getText().toString(),mPassword.getText().toString());
             } else {
                 Toast.makeText(getContext(), "Please provide a password",Toast.LENGTH_SHORT).show();
             }
@@ -56,7 +54,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private boolean isNotEmpty(EditText etText) {
-        return etText.getText().toString().trim().length() != 0;
+    private boolean isNotEmpty(EditText mEditText) {
+        return mEditText.getText().toString().trim().length() != 0;
     }
 }

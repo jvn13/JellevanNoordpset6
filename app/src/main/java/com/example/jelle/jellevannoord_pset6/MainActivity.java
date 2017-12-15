@@ -39,22 +39,20 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    static public FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-    static public DatabaseReference mDatabase;
-    static public RelativeLayout progressLayout;
+    public static DatabaseReference sDatabase;
+    public static FirebaseAuth sAuth;
+    public static RelativeLayout sProgressLayout;
     public BottomNavigationView navigation;
-    public Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        progressLayout = findViewById(R.id.progressLayout);
-        progressLayout.setVisibility(View.INVISIBLE);
+        sAuth = FirebaseAuth.getInstance();
+        sDatabase = FirebaseDatabase.getInstance().getReference();
+        sProgressLayout = findViewById(R.id.progressLayout);
+        sProgressLayout.setVisibility(View.INVISIBLE);
 
         if(null == savedInstanceState) {
             setListener();
@@ -67,14 +65,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        updateUI(mAuth.getCurrentUser());
+        sAuth = FirebaseAuth.getInstance();
+        sDatabase = FirebaseDatabase.getInstance().getReference();
+        updateUI(sAuth.getCurrentUser());
     }
 
     public void setListener() {
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+        FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 updateUI(firebaseAuth.getCurrentUser());
@@ -83,20 +80,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signIn(String email, String password) {
-        progressLayout.setVisibility(View.VISIBLE);
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        sProgressLayout.setVisibility(View.VISIBLE);
+        sAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
-                    progressLayout.setVisibility(View.GONE);
+                    sProgressLayout.setVisibility(View.GONE);
                     Log.d("logged in", "signInWithEmail:success");
-                    FirebaseUser user = mAuth.getCurrentUser();
+                    FirebaseUser mUser = sAuth.getCurrentUser();
                     getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    updateUI(user);
+                    updateUI(mUser);
                 } else {
                     // If sign in fails, display a message to the user.
-                    progressLayout.setVisibility(View.GONE);
+                    sProgressLayout.setVisibility(View.GONE);
                     Log.w("failed login", "signInWithEmail:failure", task.getException());
                     Toast.makeText(MainActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
@@ -107,21 +104,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createAccount(String email, String password) {
-        progressLayout.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        sProgressLayout.setVisibility(View.VISIBLE);
+        sAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("created users", "createUserWithEmail:success");
                     addUserToDatabase();
-                    progressLayout.setVisibility(View.GONE);
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
+                    sProgressLayout.setVisibility(View.GONE);
+                    FirebaseUser mUser = sAuth.getCurrentUser();
+                    updateUI(mUser);
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w("failed to create user", "createUserWithEmail:failure", task.getException());
-                    progressLayout.setVisibility(View.GONE);
+                    sProgressLayout.setVisibility(View.GONE);
                     Toast.makeText(MainActivity.this, "Authentication failed.",
                             Toast.LENGTH_SHORT).show();
                     updateUI(null);
@@ -140,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationFragmentManager(navigation.getSelectedItemId());
         } else {
             navigation.setVisibility(View.GONE);
-            HomeFragment fragment = new HomeFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "home").commit();
+            HomeFragment mFragment = new HomeFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mFragment, "home").commit();
         }
     }
 
@@ -150,17 +147,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                Object newUser = dataSnapshot.getValue();
-                String number;
-                if(newUser == null) {
-                    number = "1884";
+                Object mNewUser = dataSnapshot.getValue();
+                String mNumber;
+                if(mNewUser == null) {
+                    mNumber = "1884";
                 } else {
-                    number = newUser.toString();
+                    mNumber = mNewUser.toString();
                 }
-                FirebaseUser user = mAuth.getCurrentUser();
-                mDatabase.child("users").child(user.getUid()).child("username").setValue("user_"+number);
-                mDatabase.child("users").child(user.getUid()).child("karma").setValue(0);
-                mDatabase.child("settings").child("newUser").setValue(String.valueOf(Integer.parseInt(number)+1));
+                FirebaseUser mUser = sAuth.getCurrentUser();
+                sDatabase.child("users").child(mUser.getUid()).child("username").setValue("user_"+mNumber);
+                sDatabase.child("users").child(mUser.getUid()).child("karma").setValue(0);
+                sDatabase.child("settings").child("newUser").setValue(String.valueOf(Integer.parseInt(mNumber)+1));
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -168,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.child("settings").child("newUser").addListenerForSingleValueEvent(settingsListener);
+        sDatabase.child("settings").child("newUser").addListenerForSingleValueEvent(settingsListener);
     }
 
     static public void addKarma(final int earnedKarma) {
@@ -176,10 +173,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
-                Object object = dataSnapshot.getValue();
-                int karma = Integer.parseInt(object.toString());
-                karma = karma + earnedKarma;
-                mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("karma").setValue(karma);
+                Object mObject = dataSnapshot.getValue();
+                int mKarma = Integer.parseInt(mObject.toString());
+                mKarma = mKarma + earnedKarma;
+                sDatabase.child("users").child(sAuth.getCurrentUser().getUid()).child("karma").setValue(mKarma);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -187,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("karma").addListenerForSingleValueEvent(karmaListener);
+        sDatabase.child("users").child(sAuth.getCurrentUser().getUid()).child("karma").addListenerForSingleValueEvent(karmaListener);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -201,16 +198,16 @@ public class MainActivity extends AppCompatActivity {
     private boolean bottomNavigationFragmentManager(int id) {
         switch (id) {
             case R.id.navigation_home:
-                QuizFragment quizFragment = new QuizFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment, quizFragment, "quiz").commit();
+                QuizFragment mQuizFragment = new QuizFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mQuizFragment, "quiz").commit();
                 return true;
             case R.id.navigation_highscore:
-                HighscoreFragment highscoreFragment = new HighscoreFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment, highscoreFragment, "quiz").commit();
+                HighscoreFragment mHighscoreFragment = new HighscoreFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mHighscoreFragment, "quiz").commit();
                 return true;
             case R.id.navigation_account:
-                AccountFragment accountFragment = new AccountFragment();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment, accountFragment, "quiz").commit();
+                AccountFragment mAccountFragment = new AccountFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment, mAccountFragment, "quiz").commit();
                 return true;
         }
         return false;

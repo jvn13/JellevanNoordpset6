@@ -11,9 +11,7 @@ import android.widget.Toast;
 
 public class RegisterFragment extends Fragment implements View.OnClickListener {
 
-    EditText email;
-    EditText password;
-    Button register;
+    private EditText mEmail, mPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,10 +19,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_register, container, false);
         ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.register));
-        email = view.findViewById(R.id.email);
-        password = view.findViewById(R.id.password);
-        register = view.findViewById(R.id.registerButton);
-        register.setOnClickListener(this);
+        mEmail = view.findViewById(R.id.email);
+        mPassword = view.findViewById(R.id.password);
+        Button mRegister = view.findViewById(R.id.registerButton);
+        mRegister.setOnClickListener(this);
         return view;
     }
 
@@ -32,17 +30,17 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.registerButton:
-                handleRegistration();
+                checkFields();
                 break;
         }
     }
 
-    public void handleRegistration() {
-        // check email not empty
-        if(isNotEmpty(email)) {
-            // check password not empty
-            if(isNotEmpty(password)) {
-                ((MainActivity)getActivity()).createAccount(email.getText().toString(),password.getText().toString());
+    public void checkFields() {
+        // Check if the email is not empty
+        if(isNotEmpty(mEmail)) {
+            // Check if the password is not empty
+            if(isNotEmpty(mPassword)) {
+                ((MainActivity)getActivity()).createAccount(mEmail.getText().toString(),mPassword.getText().toString());
             } else {
                 Toast.makeText(getContext(), "Please provide a password",Toast.LENGTH_SHORT).show();
             }
@@ -51,7 +49,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private boolean isNotEmpty(EditText etText) {
-        return etText.getText().toString().trim().length() != 0;
+    private boolean isNotEmpty(EditText mEditText) {
+        return mEditText.getText().toString().trim().length() != 0;
     }
 }
