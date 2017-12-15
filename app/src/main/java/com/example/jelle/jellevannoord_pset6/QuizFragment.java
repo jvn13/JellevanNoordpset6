@@ -38,6 +38,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/*
+Fragment which handles the display of the info of the quiz app.
+ */
+
 public class QuizFragment extends Fragment {
 
     private TextView mInfo;
@@ -59,7 +63,9 @@ public class QuizFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set options menu to true
         setHasOptionsMenu(true);
+        // Retain this fragment across configuration changes.
         setRetainInstance(true);
     }
 
@@ -72,11 +78,14 @@ public class QuizFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        // inflate the menu
         inflater.inflate(R.menu.top_menu, menu);
     }
 
+    // Listens to options menu item select
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // Start the game with the game activity
             case R.id.add_game:
                 Intent intent = new Intent(getContext(), GameActivity.class);
                 startActivity(intent);

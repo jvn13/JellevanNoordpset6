@@ -14,7 +14,7 @@
         android:textAlignment="center"/>
 
     <TextView
-        android:id="@+id/usernameTextView"
+        android:id="@+id/usernameEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"

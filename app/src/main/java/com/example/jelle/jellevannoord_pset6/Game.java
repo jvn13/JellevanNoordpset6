@@ -2,13 +2,18 @@ package com.example.jelle.jellevannoord_pset6;
 
 import java.util.ArrayList;
 
+/*
+Game class which contains the progress of a game, including all the questions.
+It has methods to get and set the variables.
+ */
+
 public class Game {
 
     private ArrayList<Question> mQuestions;
+    private boolean mLastAnswer;
+    private int mCorrect;
     private int mCurrent;
     private int mKarma;
-    private int mCorrect;
-    private boolean mLastAnswer;
 
     public Game(ArrayList<Question> mQuestions, int current, int mKarma, int mCorrect, boolean mLastAnswer) {
         this.mQuestions = mQuestions;

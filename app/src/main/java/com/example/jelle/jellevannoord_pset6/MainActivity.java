@@ -37,6 +37,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 
+/*
+MainActivity which handles the registration and login.
+It also handles the QuizFragment, HighscoreFragment and AccountFragment
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     public static DatabaseReference sDatabase;
@@ -48,16 +53,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // Set all the variables
         sAuth = FirebaseAuth.getInstance();
         sDatabase = FirebaseDatabase.getInstance().getReference();
         sProgressLayout = findViewById(R.id.progressLayout);
         sProgressLayout.setVisibility(View.INVISIBLE);
-
+        // Set listener when no instance is saved
         if(null == savedInstanceState) {
             setListener();
         }
-
+        // Set the bottom navigation
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -70,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
         updateUI(sAuth.getCurrentUser());
     }
 
+    // Sets a custom title
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
+    }
+
+    // Listens to a change in the Authentication state
     public void setListener() {
         FirebaseAuth.AuthStateListener mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    // Signs in a Firebase User, displays an error when it fails
     public void signIn(String email, String password) {
         sProgressLayout.setVisibility(View.VISIBLE);
         sAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -103,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Creates a Firebase User and signs in that user, displays an error when it fails
     public void createAccount(String email, String password) {
         sProgressLayout.setVisibility(View.VISIBLE);
         sAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -127,10 +140,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setActionBarTitle(String title){
-        getSupportActionBar().setTitle(title);
-    }
-
+    // Updates the interface based on the Firebase User
     public void updateUI(FirebaseUser currentUser) {
         if(currentUser != null) {
             navigation.setVisibility(View.VISIBLE);
@@ -142,18 +152,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Adds a user with an initial username and karma to the Firebase database
     private void addUserToDatabase() {
         ValueEventListener settingsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 Object mNewUser = dataSnapshot.getValue();
+                // Get the initial user number
                 String mNumber;
                 if(mNewUser == null) {
                     mNumber = "1884";
                 } else {
                     mNumber = mNewUser.toString();
                 }
+                // Add the user to the database
                 FirebaseUser mUser = sAuth.getCurrentUser();
                 sDatabase.child("users").child(mUser.getUid()).child("username").setValue("user_"+mNumber);
                 sDatabase.child("users").child(mUser.getUid()).child("karma").setValue(0);
@@ -165,26 +178,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
             }
         };
+        // Get the initial user number from the settings and add the user to the database
         sDatabase.child("settings").child("newUser").addListenerForSingleValueEvent(settingsListener);
-    }
-
-    static public void addKarma(final int earnedKarma) {
-        ValueEventListener karmaListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                Object mObject = dataSnapshot.getValue();
-                int mKarma = Integer.parseInt(mObject.toString());
-                mKarma = mKarma + earnedKarma;
-                sDatabase.child("users").child(sAuth.getCurrentUser().getUid()).child("karma").setValue(mKarma);
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        sDatabase.child("users").child(sAuth.getCurrentUser().getUid()).child("karma").addListenerForSingleValueEvent(karmaListener);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -195,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // Handles the fragments when clicking the bottom navigator
     private boolean bottomNavigationFragmentManager(int id) {
         switch (id) {
             case R.id.navigation_home:

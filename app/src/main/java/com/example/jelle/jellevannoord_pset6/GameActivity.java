@@ -1,6 +1,5 @@
 package com.example.jelle.jellevannoord_pset6;
 
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -15,17 +14,22 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+/*
+Activity which handles the complete game with all the five questions.
+ */
 
 public class GameActivity extends AppCompatActivity {
 
+    // Variables
     public static Game sGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        // If no is fragment saved, display explanation fragment
         if(null == savedInstanceState) {
             ExplanationFragment fragment = new ExplanationFragment();
             getSupportFragmentManager().beginTransaction()
@@ -33,6 +37,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    // Gets five questions from the opentdb api
     public void getQuestions() {
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, "https://opentdb.com/api.php?amount=5", null,
@@ -71,18 +76,20 @@ public class GameActivity extends AppCompatActivity {
         queue.add(jsObjRequest);
     }
 
-    // Create new game and go to the first question
+    // Creates new game and go to the first question
     private void startGame(ArrayList<Question> questions) {
         sGame = new Game(questions, 0, 0, 0, false);
         nextQuestion();
     }
 
-    public void openBetweenFragment() {
+    // Displays the result fragment between the questions and after the game
+    public void displayResult() {
         ResultFragment resultFragment = new ResultFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment, resultFragment, "question").commit();
     }
 
+    // Displays the question fragment with the next question
     public void nextQuestion() {
         MultipleQuestionFragment multipleQuestionFragment = new MultipleQuestionFragment();
         getSupportFragmentManager().beginTransaction()

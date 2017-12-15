@@ -15,4 +15,11 @@
         \n\nEnjoy the game!</string>
     <string name="explanation">This game contains five question.\nTry to answer them correct!\n\nGood luck!</string>
     <string name="back_home">Back to home</string>
+    <string name="result">Result</string>
+    <string name="all_answered">You\'ve answered all the questions</string>
+    <string name="display_correct_answer">The correct answer was %1$s!</string>
+    <string name="total_correct_questions">%1$s of the %2$s questions were correct. You\'ve earned %3$s karma!</string>
+    <string name="counter">%1$s / %2$s</string>
+    <string name="true_value">True</string>
+    <string name="false_value">False</string>
 </resources>

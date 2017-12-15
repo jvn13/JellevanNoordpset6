@@ -24,6 +24,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/*
+Fragment which displays the users based on the karma. With the user with the highest karma on top.
+ */
+
 public class HighscoreFragment extends ListFragment {
 
     private ArrayAdapter mAdapter;
@@ -33,27 +37,24 @@ public class HighscoreFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_highscore, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_highscore, container, false);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Retain this fragment across configuration changes.
         setHasOptionsMenu(true);
     }
 
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+        // Display the progressbar
         MainActivity.sProgressLayout.setVisibility(View.VISIBLE);
         getUsers();
+        // Hide the progressbar
         MainActivity.sProgressLayout.setVisibility(View.INVISIBLE);
-    }
-
-    public ArrayList<User> sortUsers(ArrayList<User> mUsers){
-        Collections.sort(mUsers);
-        return mUsers;
     }
 
     @Override
@@ -61,11 +62,18 @@ public class HighscoreFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
     }
 
-    public void getUsers() {
+    // Sorts the users based on their karma
+    private ArrayList<User> sortUsers(ArrayList<User> mUsers){
+        Collections.sort(mUsers);
+        return mUsers;
+    }
 
+    // Gets all the users from the Firebase database
+    public void getUsers() {
         ValueEventListener usersListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Sort and add the users to the list
                 setUsers(dataSnapshot);
             }
             @Override
@@ -77,13 +85,17 @@ public class HighscoreFragment extends ListFragment {
         MainActivity.sDatabase.child("users").addListenerForSingleValueEvent(usersListener);
     }
 
-    public void setUsers(DataSnapshot dataSnapshot) {
+    // Sort the users based on their karma and display them in the list
+    private void setUsers(DataSnapshot dataSnapshot) {
         mUsers = new ArrayList<>();
+        // Add each user to the ArrayList
         for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
             User mUser = snapshot.getValue(User.class);
             mUsers.add(mUser);
         }
+        // Sort the users based on their karma
         ArrayList<User> mSortedUsers = sortUsers(mUsers);
+        // Add the users to the list with the UserAdapter
         mAdapter = new UserAdapter(getContext(), R.layout.row_user, mSortedUsers);
         this.setListAdapter(mAdapter);
     }

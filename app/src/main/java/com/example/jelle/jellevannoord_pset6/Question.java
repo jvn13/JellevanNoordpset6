@@ -2,6 +2,11 @@ package com.example.jelle.jellevannoord_pset6;
 
 import java.util.ArrayList;
 
+/*
+Question class which saves all the attributes of a question in a game.
+It also contains methods to get this attributes.
+ */
+
 public class Question {
 
     private String mCategory;
@@ -19,10 +24,6 @@ public class Question {
         this.mCorrectAnswer = mCorrectAnswer;
         this.mAnswers = mAnswers;
         mAnswers.add(this.mCorrectAnswer);
-    }
-
-    public String getCategory() {
-        return mCategory;
     }
 
     public String getType() {

@@ -11,6 +11,11 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+/*
+Fragment which is shown first to not logged in users.
+The users can make a choice between sign in and register an account.
+ */
+
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
@@ -20,12 +25,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // Set custom title
         ((MainActivity)getActivity()).setActionBarTitle(getString(R.string.app_name));
-        // Assign the Button views
-        Button mRegister = view.findViewById(R.id.registerButton);
-        TextView mLogin = view.findViewById(R.id.loginLink);
-        // Set the onclick listeners of the buttons
-        mRegister.setOnClickListener(this);
-        mLogin.setOnClickListener(this);
+        // Set the onclick listeners for the register and login button
+        view.findViewById(R.id.registerButton).setOnClickListener(this);
+        view.findViewById(R.id.loginLink).setOnClickListener(this);
         return view;
     }
 

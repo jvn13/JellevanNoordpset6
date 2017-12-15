@@ -14,8 +14,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Random;
 
+/*
+Fragment which displays a question and handles the answer of the user.
+ */
+
 public class MultipleQuestionFragment extends Fragment implements View.OnClickListener {
 
+    // Variables
     private boolean mMultiple = false;
     private Button mButton0, mButton1, mButton2, mButton3;
     private Question mQuestion;
@@ -39,43 +44,14 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Retain this fragment across configuration changes.
         setRetainInstance(true);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        mQuestion = GameActivity.sGame.getQuestion();
-        if(mQuestion.getType().equals("multiple")) {
-            mMultiple = true;
-        } else {
-            mButton2.setVisibility(View.GONE);
-            mButton3.setVisibility(View.GONE);
-        }
-        mDifficultyTextView.setText(mQuestion.getDifficulty());
-        mQuestionCounter.setText(String.valueOf(GameActivity.sGame.getCurrent()+1)
-                + " / " + String.valueOf(GameActivity.sGame.getTotalQuestions()));
-        mQuestionTextView.setText(Html.fromHtml(mQuestion.getQuestion()));
-        ArrayList<Button> mButtons = createButtonsList(mMultiple);
-        ArrayList<String> mAnswers = mQuestion.getAnswers();
-        if(mMultiple) {
-            Random mRandom = new Random();
-            if(!mAnswers.isEmpty()) {
-                for(int i=0;i<mButtons.size();i++) {
-                    int index = mRandom.nextInt(mAnswers.size());
-                    mButtons.get(i).setText(Html.fromHtml(mAnswers.get(index)));
-                    mAnswers.remove(index);
-                }
-            }
-        } else {
-            mButton0.setText("True");
-            mButton1.setText("False");
-        }
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // If the text from the buttons is saved, restore it
         if(savedInstanceState != null) {
             mButton0.setText(savedInstanceState.getString(String.valueOf(R.id.button0)));
             mButton1.setText(savedInstanceState.getString(String.valueOf(R.id.button1)));
@@ -85,25 +61,8 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View view) {
-        Button mButton = (Button) view;
-        String mUserAnswer = mButton.getText().toString();
-        if(mUserAnswer.equals(mQuestion.getCorrect_answer())) {
-            int mKarma = 2 * difficultyToInt(mQuestion.getDifficulty());
-            if(!mMultiple) {
-                mKarma = mKarma / 2;
-            }
-            GameActivity.sGame.addKarma(mKarma);
-            GameActivity.sGame.addCorrect();
-            GameActivity.sGame.setLastAnswer(true);
-        } else {
-            GameActivity.sGame.setLastAnswer(false);
-        }
-        ((GameActivity)getActivity()).openBetweenFragment();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the text from the buttons
         savedInstanceState.putString(String.valueOf(R.id.button0), mButton0.getText().toString());
         savedInstanceState.putString(String.valueOf(R.id.button1), mButton1.getText().toString());
         savedInstanceState.putString(String.valueOf(R.id.button2), mButton2.getText().toString());
@@ -111,6 +70,50 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        // Get current question from the game
+        mQuestion = GameActivity.sGame.getQuestion();
+        // Check which question type it is
+        if(mQuestion.getType().equals("multiple")) {
+            mMultiple = true;
+        } else {
+            // Hide the useless buttons
+            mButton2.setVisibility(View.GONE);
+            mButton3.setVisibility(View.GONE);
+        }
+        // Set the info of the question
+        setQuestionInfo();
+        // Get a list of Buttons
+        ArrayList<Button> mButtons = createButtonsList(mMultiple);
+        // Get a list of answers
+        ArrayList<String> mAnswers = mQuestion.getAnswers();
+        // Assign the answers to a Button
+        assignButtonText(mButtons, mAnswers);
+    }
+
+    @Override
+    public void onClick(View view) {
+        // Get the value of the answer
+        Button mButton = (Button) view;
+        String mUserAnswer = mButton.getText().toString();
+        // Check if given answer is correct
+        if(mUserAnswer.equals(Html.fromHtml(mQuestion.getCorrect_answer()))) {
+            // Calculate karma
+            int mKarma = calculateKarma();
+            // Add karma, correct and lastAnswer boolean to game
+            GameActivity.sGame.addKarma(mKarma);
+            GameActivity.sGame.addCorrect();
+            GameActivity.sGame.setLastAnswer(true);
+        } else {
+            GameActivity.sGame.setLastAnswer(false);
+        }
+        // Display the ResultFragment
+        ((GameActivity)getActivity()).displayResult();
+    }
+
+    // Assigns the TextViews and Buttons
     private void assignViews(View view) {
         // TextViews
         mDifficultyTextView = view.findViewById(R.id.difficultyTV);
@@ -123,6 +126,15 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
         mButton3 = view.findViewById(R.id.button3);
     }
 
+    private void setQuestionInfo() {
+        mDifficultyTextView.setText(mQuestion.getDifficulty());
+        mQuestionCounter.setText(getString(R.string.counter,
+                String.valueOf(GameActivity.sGame.getCurrent()+1),
+                String.valueOf(GameActivity.sGame.getTotalQuestions())));
+        mQuestionTextView.setText(Html.fromHtml(mQuestion.getQuestion()));
+    }
+
+    // Creates a list of the buttons
     private ArrayList<Button> createButtonsList(boolean mMultiple) {
         ArrayList<Button> mButtons = new ArrayList<>();
         mButtons.add(mButton0);
@@ -134,6 +146,31 @@ public class MultipleQuestionFragment extends Fragment implements View.OnClickLi
         return mButtons;
     }
 
+    private void assignButtonText(ArrayList<Button> mButtons, ArrayList<String> mAnswers) {
+        if(mMultiple) {
+            Random mRandom = new Random();
+            if(!mAnswers.isEmpty()) {
+                for(int i=0;i<mButtons.size();i++) {
+                    int index = mRandom.nextInt(mAnswers.size());
+                    mButtons.get(i).setText(Html.fromHtml(mAnswers.get(index)));
+                    mAnswers.remove(index);
+                }
+            }
+        } else {
+            mButton0.setText(getString(R.string.true_value));
+            mButton1.setText(getString(R.string.false_value));
+        }
+    }
+
+    private int calculateKarma() {
+        int mKarma = 2 * difficultyToInt(mQuestion.getDifficulty());
+        if(!mMultiple) {
+            mKarma = mKarma / 2;
+        }
+        return mKarma;
+    }
+
+    // Converts the String difficulty to an int
     private int difficultyToInt(String mDifficulty) {
         switch(mDifficulty) {
             case "easy":
