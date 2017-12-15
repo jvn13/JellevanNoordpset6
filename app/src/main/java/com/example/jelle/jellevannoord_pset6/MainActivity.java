@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
         progressLayout.setVisibility(View.INVISIBLE);
 
         if(null == savedInstanceState) {
-            setListener();
+            QuizFragment quizFragment = new QuizFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, quizFragment, "quiz").commit();
         }
 
         navigation = findViewById(R.id.navigation);
@@ -73,14 +74,6 @@ public class MainActivity extends AppCompatActivity {
         updateUI(mAuth.getCurrentUser());
     }
 
-    public void setListener() {
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                updateUI(firebaseAuth.getCurrentUser());
-            }
-        };
-    }
 
     public void signIn(String email, String password) {
         progressLayout.setVisibility(View.VISIBLE);

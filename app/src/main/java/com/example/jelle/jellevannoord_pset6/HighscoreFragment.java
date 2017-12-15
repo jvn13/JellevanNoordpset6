@@ -44,8 +44,8 @@ public class HighscoreFragment extends ListFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         MainActivity.progressLayout.setVisibility(View.VISIBLE);
         getUsers();
         MainActivity.progressLayout.setVisibility(View.INVISIBLE);
