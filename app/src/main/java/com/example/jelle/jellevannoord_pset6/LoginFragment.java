@@ -30,7 +30,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         password = view.findViewById(R.id.password);
         login = view.findViewById(R.id.loginButton);
         login.setOnClickListener(this);
-
         return view;
     }
 

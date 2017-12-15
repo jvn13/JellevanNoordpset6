@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.example.jelle.jellevannoord_pset6.HighscoreFragment">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="highscore" />
+    <ListView
+        android:id="@+id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+    </ListView>
+
 </FrameLayout>

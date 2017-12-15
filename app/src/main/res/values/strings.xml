@@ -4,11 +4,15 @@
     <string name="got_account">Already got an account?</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="daily_challenge">Daily challenge</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="incorrect_answer">Unfortunately, your answer was not correct!</string>
+    <string name="correct_answer">Congratulations, your answer was correct!</string>
+    <string name="info">In this triva game you can earn karma point by playing games of five questions.
+        \n\nThere are two types of questions: True/False and multiple choice.
+        \n\nThe difficulty of the questions is also variable. A question can be easy, medium or hard.
+        The karma points will be rewarded according to the difficulty of the question.
+        \n\nEnjoy the game!</string>
+    <string name="explanation">This game contains five question.\nTry to answer them correct!\n\nGood luck!</string>
+    <string name="back_home">Back to home</string>
 </resources>

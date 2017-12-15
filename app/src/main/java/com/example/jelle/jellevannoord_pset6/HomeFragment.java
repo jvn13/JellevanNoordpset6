@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.registerButton:
                 RegisterFragment registerFragment = new RegisterFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .setCustomAnimations(R.animator.slide_in_left,R.animator.slide_out_right,0,0)
+                        .setCustomAnimations(R.animator.slide_in_left,R.animator.slide_out_right,R.animator.slide_out_left,R.animator.slide_in_right)
                         .replace(R.id.fragment, registerFragment).addToBackStack(null).commit();
                 break;
             case R.id.loginLink:
