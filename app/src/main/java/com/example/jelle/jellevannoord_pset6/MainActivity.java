@@ -57,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
         progressLayout.setVisibility(View.INVISIBLE);
 
         if(null == savedInstanceState) {
-            QuizFragment quizFragment = new QuizFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment, quizFragment, "quiz").commit();
+            setListener();
         }
 
         navigation = findViewById(R.id.navigation);
@@ -70,9 +69,18 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
         updateUI(mAuth.getCurrentUser());
     }
 
+    public void setListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                updateUI(firebaseAuth.getCurrentUser());
+            }
+        };
+    }
 
     public void signIn(String email, String password) {
         progressLayout.setVisibility(View.VISIBLE);
@@ -127,12 +135,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateUI(FirebaseUser currentUser) {
-        if(currentUser == null) {
+        if(currentUser != null) {
+            navigation.setVisibility(View.VISIBLE);
+            bottomNavigationFragmentManager(navigation.getSelectedItemId());
+        } else {
             navigation.setVisibility(View.GONE);
             HomeFragment fragment = new HomeFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "home").commit();
-        } else {
-            navigation.setVisibility(View.VISIBLE);
         }
     }
 
@@ -168,10 +177,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
                 Object object = dataSnapshot.getValue();
-                int karma = 0;
-                if(object != null) {
-                    karma = Integer.parseInt(object.toString());
-                }
+                int karma = Integer.parseInt(object.toString());
                 karma = karma + earnedKarma;
                 mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("karma").setValue(karma);
             }
@@ -181,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("cancelled", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        mDatabase.child("user").child(mAuth.getCurrentUser().getUid()).child("karma").addListenerForSingleValueEvent(karmaListener);
+        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("karma").addListenerForSingleValueEvent(karmaListener);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
