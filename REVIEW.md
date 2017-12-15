@@ -2,75 +2,75 @@
 
 Review performed by Mathijs Kappetijn:
 
-Aspect: names
-Not every variable name is according to the style guide.
-Example: 
-static public Game game;
-Most of MainActivity.java
-Next time:
-Read the style guide and start with using the correct syntax.
+Aspect: names<br>
+Not every variable name is according to the style guide.<br>
+Example: <br>
+static public Game game;<br>
+Most of MainActivity.java<br>
+Next time:<br>
+Read the style guide and start with using the correct syntax.<br>
 
-Aspect: headers
-Headers are mostly missing.
-Example: 
-LoginFragment.java
-Next time:
-When you create the file, paste a sample header. This way you don't forget it.
+Aspect: headers<br>
+Headers are mostly missing.<br>
+Example: <br>
+LoginFragment.java<br>
+Next time:<br>
+When you create the file, paste a sample header. This way you don't forget it.<br>
 
-Aspect: comments
-There are some comments, but not much.
-Example: 
-MainActivity.java
-Next time:
-When creating a new method, put comment tags above it and explain what the function does.
+Aspect: comments<br>
+There are some comments, but not much.<br>
+Example: <br>
+MainActivity.java<br>
+Next time:<br>
+When creating a new method, put comment tags above it and explain what the function does.<br>
 
-Aspect: layout
-Looking good, but don't forget old code or TODO comments!
-Example: 
-QuizFragment.java
-GameActivity.java
-Next time:
-Check your code while searching for comment tags, this way you can't overlook it.
+Aspect: layout<br>
+Looking good, but don't forget old code or TODO comments!<br>
+Example: <br>
+QuizFragment.java<br>
+GameActivity.java<br>
+Next time:<br>
+Check your code while searching for comment tags, this way you can't overlook it.<br>
 
-Aspect: formatting
-Formatting looks good and are all the same.
-Example: 
-Every file
-Next time:
-Keep it up!
+Aspect: formatting<br>
+Formatting looks good and are all the same.<br>
+Example: <br>
+Every file<br>
+Next time:<br>
+Keep it up!<br>
 
-Aspect: flow
-Looks good, but try to make generic functions/standard functions less important than your own functions!
-Example:
-MultipleQuestionFragment.java
-Next time:
-Put the generic functions at the bottem.
+Aspect: flow<br>
+Looks good, but try to make generic functions/standard functions less important than your own functions!<br>
+Example:<br>
+MultipleQuestionFragment.java<br>
+Next time:<br>
+Put the generic functions at the bottem.<br>
 
-Aspect: idiom
-Looking good.
-Example:
-Every file
-Next time:
-Keep it up!
+Aspect: idiom<br>
+Looking good.<br>
+Example:<br>
+Every file<br>
+Next time:<br>
+Keep it up!<br>
 
-Aspect: expressions
-Looking good, but try to use the same variable/function for everything the same.
-Example:
-MultipleQuestionFragment.java
-Next time:
-Check your code one more time if you have changed everything.
+Aspect: expressions<br>
+Looking good, but try to use the same variable/function for everything the same.<br>
+Example:<br>
+MultipleQuestionFragment.java<br>
+Next time:<br>
+Check your code one more time if you have changed everything.<br>
 
-Aspect: decomposition
-Looking mostly good, but some functions can have an improvement
-Example:
-GameActivity.java
-Next time:
-Try to break very long functions apart.
+Aspect: decomposition<br>
+Looking mostly good, but some functions can have an improvement<br>
+Example:<br>
+GameActivity.java<br>
+Next time:<br>
+Try to break very long functions apart.<br>
 
 
-Aspect: modularization
-This is looking good. Every file has its own function.
-Example:
-Every file
-Next time:
-Keep it up!
+Aspect: modularization<br>
+This is looking good. Every file has its own function.<br>
+Example:<br>
+Every file<br>
+Next time:<br>
+Keep it up!<br>
